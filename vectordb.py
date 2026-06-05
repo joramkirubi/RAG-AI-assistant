@@ -13,14 +13,28 @@ EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
 
 def get_embeddings():
-    """Load the HuggingFace embedding model."""
+    """Load the HuggingFace embedding model safely."""
     print("[INFO] Loading embedding model...")
-    embeddings = HuggingFaceEmbeddings(
-        model_name=EMBEDDING_MODEL,
-        model_kwargs={"device": "cpu"},
-        encode_kwargs={"normalize_embeddings": True},
-    )
-    return embeddings
+
+    try:
+        embeddings = HuggingFaceEmbeddings(
+            model_name=EMBEDDING_MODEL,
+            model_kwargs={
+                "device": "cpu",
+                "trust_remote_code": False
+            },
+            encode_kwargs={
+                "normalize_embeddings": True
+            },
+        )
+        return embeddings
+
+    except Exception as e:
+        raise RuntimeError(
+            f"Failed to load embedding model: {e}\n"
+            "Fix: ensure torch + sentence-transformers are correctly installed "
+            "and you're using Python 3.11 (NOT 3.13)."
+        )
 
 
 def get_vectorstore(embeddings=None):
@@ -39,14 +53,14 @@ def get_vectorstore(embeddings=None):
         embedding_function=embeddings,
         persist_directory=VECTORSTORE_DIR,
     )
+
     return vectorstore
 
 
 def get_retriever(k=4):
-    """Return a retriever that fetches the top-k most relevant chunks."""
+    """Return a retriever that fetches top-k relevant chunks."""
     vectorstore = get_vectorstore()
-    retriever = vectorstore.as_retriever(
+    return vectorstore.as_retriever(
         search_type="similarity",
         search_kwargs={"k": k},
     )
-    return retriever
