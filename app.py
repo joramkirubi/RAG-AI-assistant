@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from rag_chain import build_rag_chain
+from rag_chain import build_rag_chain, ask
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -80,10 +80,22 @@ if prompt := st.chat_input("Ask me anything about your documents..."):
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             try:
-                answer = st.session_state.chain.invoke(prompt)
+                answer, sources = ask(prompt, st.session_state.chain)
             except Exception as e:
                 answer = f"❌ Error generating response: {e}"
+                sources = []
+
         st.markdown(answer)
+
+        # ── Show Sources ───────────────────────────────────────────────
+        if sources:
+            with st.expander("📚 Sources"):
+                seen = set()
+                for doc in sources:
+                    src = doc.metadata.get("source", "Unknown")
+                    if src not in seen:
+                        st.markdown(f"- `{src}`")
+                        seen.add(src)
 
     st.session_state.messages.append({"role": "assistant", "content": answer})
 
