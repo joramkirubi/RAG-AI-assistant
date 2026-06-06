@@ -64,7 +64,7 @@ def get_sources(docs) -> list[dict]:
     return sources
 
 
-def get_llm(model: str = "llama3-8b-8192", temperature: float = 0.2) -> ChatGroq:
+def get_llm(model: str = "llama-3.1-8b-instant", temperature: float = 0.2) -> ChatGroq:
     """Initialise the Groq LLM. Reads GROQ_API_KEY from .env."""
     api_key = os.environ.get("GROQ_API_KEY")
     if not api_key:
@@ -83,7 +83,7 @@ def get_llm(model: str = "llama3-8b-8192", temperature: float = 0.2) -> ChatGroq
 
 # ── RAG Chain ─────────────────────────────────────────────────────────────────
 
-def ask(question: str, k: int = 4, model: str = "llama3-8b-8192") -> dict:
+def ask(question: str, k: int = 4, model: str = "llama-3.1-8b-instant") -> dict:
     """
     Ask a question and return a dict with:
         {

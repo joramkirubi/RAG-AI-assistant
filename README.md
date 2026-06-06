@@ -22,7 +22,7 @@ Built with ChromaDB, HuggingFace embeddings, Groq LLM, LangChain, and Streamlit.
 |---|---|---|
 | Vector database | ChromaDB | 0.5.5 |
 | Embeddings | HuggingFace `all-MiniLM-L6-v2` | 3.0.1 |
-| LLM | Groq API (LLaMA 3) | llama3-8b-8192 |
+| LLM | Groq API (LLaMA 3) | llama-3.1-8b-instant |
 | Interface | Streamlit | 1.37.1 |
 | Framework | LangChain | 0.2.16 |
 | Secret management | python-dotenv | 1.0.1 |
