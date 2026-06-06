@@ -154,6 +154,9 @@ Re-run this every time you add or change documents.
 
 ```bash
 streamlit run app.py
+
+# If the above fails (path conflict), use:
+python -m streamlit run app.py
 ```
 
 Open your browser at `http://localhost:8501`.
@@ -164,7 +167,10 @@ Open your browser at `http://localhost:8501`.
 
 1. Add `.txt` or `.json` files to `data/`
 2. Run `python ingest.py`
-3. Run `streamlit run app.py`
+3. Run `streamlit run app.py
+
+# If the above fails (path conflict), use:
+python -m streamlit run app.py`
 4. Ask questions in natural language
 5. Each answer will show the source documents it was pulled from
 

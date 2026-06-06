@@ -1,18 +1,21 @@
 """
 app.py
 Streamlit chatbot interface for the RAG Assistant.
-Shows the AI answer AND which documents were referenced.
+
+Key improvement: embedding model and vector store are pre-loaded and cached
+using @st.cache_resource when the app starts. This means the first question
+is answered at the same speed as all subsequent ones — no cold-start delay.
 
 Run with:
-    streamlit run app.py
+    python -m streamlit run app.py
 """
 
 import os
 from dotenv import load_dotenv
 import streamlit as st
 from rag_chain import ask
+from vectordb import get_embeddings, get_vectorstore
 
-# Load .env so the API key is available
 load_dotenv()
 
 # ── Page config ───────────────────────────────────────────────────────────────
@@ -51,17 +54,13 @@ st.markdown("""
 st.markdown("## 🤖 RAG AI Assistant")
 st.markdown(
     "<span style='color:#4a7a9b; font-size:0.9rem;'>"
-    "ChromaDB &nbsp;·&nbsp; HuggingFace Embeddings &nbsp;·&nbsp; Groq LLM"
+    "ChromaDB &nbsp;·&nbsp; HuggingFace Embeddings &nbsp;·&nbsp; Groq LLM &nbsp;·&nbsp; ReAct Reasoning"
     "</span>",
     unsafe_allow_html=True,
 )
 st.divider()
 
-# ── Session state ─────────────────────────────────────────────────────────────
-if "messages" not in st.session_state:
-    st.session_state.messages = []  # {role, content, sources}
-
-# ── Check setup on load ───────────────────────────────────────────────────────
+# ── Check setup before anything else ─────────────────────────────────────────
 api_key   = os.environ.get("GROQ_API_KEY", "")
 vs_exists = os.path.exists("vectorstore")
 
@@ -73,12 +72,27 @@ if not vs_exists:
     st.error("⚠️ **Vector store not found.** Run `python ingest.py` first.")
     st.stop()
 
-# ── Render existing chat history ──────────────────────────────────────────────
+# ── Pre-load and cache embedding model + vector store ─────────────────────────
+# @st.cache_resource runs this function ONCE when the app starts and keeps
+# the result in memory. Every query after the first uses the cached objects —
+# no model re-loading, no cold-start delay.
+@st.cache_resource(show_spinner="Loading knowledge base... (first time only)")
+def load_rag_components():
+    embeddings  = get_embeddings()
+    vectorstore = get_vectorstore(embeddings)
+    return embeddings, vectorstore
+
+# Trigger the cache on startup so it's ready before the first question
+load_rag_components()
+
+# ── Session state ─────────────────────────────────────────────────────────────
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+# ── Render chat history ───────────────────────────────────────────────────────
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
-
-        # Show sources for assistant messages
         if msg["role"] == "assistant" and msg.get("sources"):
             source_names = "  &nbsp;|&nbsp;  ".join(
                 f"📄 {s['file']} <span style='color:#2a4a6a'>({s['type']})</span>"
@@ -95,31 +109,25 @@ for msg in st.session_state.messages:
 # ── Input ─────────────────────────────────────────────────────────────────────
 if prompt := st.chat_input("Ask a question about your documents..."):
 
-    # User message
     st.session_state.messages.append({"role": "user", "content": prompt, "sources": []})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # Assistant response
     with st.chat_message("assistant"):
-        with st.spinner("Searching documents and generating answer..."):
+        with st.spinner("Thinking..."):
             try:
                 result  = ask(prompt)
                 answer  = result["answer"]
                 sources = result["sources"]
             except FileNotFoundError as e:
-                answer  = f"❌ {e}"
-                sources = []
+                answer, sources = f"❌ {e}", []
             except EnvironmentError as e:
-                answer  = f"❌ {e}"
-                sources = []
+                answer, sources = f"❌ {e}", []
             except Exception as e:
-                answer  = f"❌ Unexpected error: {e}"
-                sources = []
+                answer, sources = f"❌ Unexpected error: {e}", []
 
         st.markdown(answer)
 
-        # Source citation block
         if sources:
             source_names = "  &nbsp;|&nbsp;  ".join(
                 f"📄 {s['file']} <span style='color:#2a4a6a'>({s['type']})</span>"
@@ -143,15 +151,12 @@ if prompt := st.chat_input("Ask a question about your documents..."):
 with st.sidebar:
     st.header("⚙️ Settings")
 
-    # API key status
     if api_key:
-        st.success("✅ GROQ_API_KEY loaded from .env")
+        st.success("✅ GROQ_API_KEY loaded")
     else:
         st.error("❌ GROQ_API_KEY missing")
 
     st.divider()
-
-    # Loaded documents
     st.subheader("📂 Knowledge Base")
     data_dir = "data"
     if os.path.exists(data_dir):
@@ -169,17 +174,17 @@ with st.sidebar:
         st.warning("data/ directory not found.")
 
     st.divider()
-
-    # Vector store status
     st.subheader("🗄️ Vector Store")
     if vs_exists:
-        st.success("✅ Vector store ready")
+        st.success("✅ Ready")
     else:
-        st.error("❌ Not built — run python ingest.py")
+        st.error("❌ Run python ingest.py")
 
     st.divider()
+    st.subheader("🧠 Reasoning")
+    st.info("Strategy: **ReAct**\nReason → Retrieve → Answer")
 
-    # Clear chat
+    st.divider()
     if st.button("🗑️ Clear Chat"):
         st.session_state.messages = []
         st.rerun()
