@@ -1,0 +1,49 @@
+[
+  {
+    "topic": "ChromaDB",
+    "category": "Vector Database",
+    "description": "ChromaDB is an open-source AI-native vector database. It stores embeddings and allows fast cosine similarity search. It persists data locally in SQLite with no external server required.",
+    "use_case": "Used in this project to store document embeddings and retrieve relevant chunks at query time.",
+    "version": "0.5.5",
+    "website": "https://www.trychroma.com"
+  },
+  {
+    "topic": "sentence-transformers/all-MiniLM-L6-v2",
+    "category": "Embedding Model",
+    "description": "A lightweight sentence transformer model that converts text into 384-dimensional dense vectors. It runs on CPU without a GPU and produces high-quality semantic embeddings for retrieval tasks.",
+    "use_case": "Used to embed document chunks during ingestion and to embed user queries at retrieval time.",
+    "version": "3.0.1",
+    "website": "https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2"
+  },
+  {
+    "topic": "Groq API",
+    "category": "LLM Provider",
+    "description": "Groq provides fast AI inference using custom LPU hardware. It supports models including LLaMA 3, Mixtral, and Gemma. The API is compatible with the OpenAI SDK interface and delivers sub-second response latency.",
+    "use_case": "Used as the LLM backend to generate answers from retrieved context.",
+    "model_used": "llama3-8b-8192",
+    "website": "https://console.groq.com"
+  },
+  {
+    "topic": "LangChain",
+    "category": "Orchestration Framework",
+    "description": "LangChain is a Python framework for building LLM-powered applications. It provides composable abstractions for document loading, text splitting, embedding, vector stores, and LLM chains.",
+    "use_case": "Used to orchestrate the full RAG pipeline from document ingestion to answer generation.",
+    "version": "0.2.16",
+    "website": "https://www.langchain.com"
+  },
+  {
+    "topic": "Streamlit",
+    "category": "User Interface",
+    "description": "Streamlit is a Python library for building interactive web applications. It provides built-in chat_message components and session state management, making it ideal for chatbot interfaces.",
+    "use_case": "Used to build the conversational chat interface for the RAG assistant.",
+    "version": "1.37.1",
+    "website": "https://streamlit.io"
+  },
+  {
+    "topic": "python-dotenv",
+    "category": "Configuration",
+    "description": "python-dotenv loads environment variables from a .env file into the process environment at runtime. This keeps API keys and secrets out of source code and version control.",
+    "use_case": "Used to securely load the GROQ_API_KEY from the .env file.",
+    "version": "1.0.1"
+  }
+]

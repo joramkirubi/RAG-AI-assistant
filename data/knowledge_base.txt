@@ -1,0 +1,83 @@
+ARTIFICIAL INTELLIGENCE AND MACHINE LEARNING
+
+Artificial Intelligence (AI) is the simulation of human intelligence by machines. AI systems can perform tasks such as visual perception, speech recognition, decision-making, and language translation.
+
+Machine Learning (ML) is a subset of AI that enables systems to learn from data and improve over time without being explicitly programmed. It uses algorithms to parse data, learn from it, and make informed decisions.
+
+Deep Learning is a subset of machine learning that uses multi-layered neural networks to model complex patterns. It powers image recognition, natural language processing, and speech synthesis.
+
+Natural Language Processing (NLP) is an area of AI that focuses on the interaction between computers and humans through language. NLP enables machines to read, understand, and generate human text.
+
+---
+
+RETRIEVAL-AUGMENTED GENERATION (RAG)
+
+RAG stands for Retrieval-Augmented Generation. It is an AI architecture that improves LLM responses by retrieving relevant documents from a knowledge base before generating an answer.
+
+How RAG works:
+1. Documents are loaded, split into chunks, and embedded into vectors.
+2. Vectors are stored in a vector database such as ChromaDB.
+3. When a user asks a question, the query is embedded and similar chunks are retrieved.
+4. The retrieved context is passed to an LLM to generate a grounded answer.
+
+Benefits of RAG:
+- Reduces hallucinations by grounding responses in real documents.
+- Allows LLMs to access up-to-date or private information.
+- Provides source traceability for every answer.
+- Cheaper than fine-tuning a model on new data.
+
+---
+
+VECTOR DATABASES
+
+A vector database stores high-dimensional embeddings and allows fast similarity search. When a query is made, the database finds the stored vectors most similar to the query vector.
+
+ChromaDB is an open-source, lightweight vector database built for AI applications. It persists data locally to disk using SQLite, requires no external server, and integrates natively with LangChain.
+
+FAISS (Facebook AI Similarity Search) is a high-performance library for efficient similarity search over large datasets. It operates in-memory and is widely used in research and production.
+
+Pinecone is a managed cloud vector database suitable for large-scale enterprise deployments where infrastructure management is not desired.
+
+Cosine similarity is the primary metric used for semantic search in vector databases. It measures the angle between two vectors — a smaller angle means greater similarity.
+
+---
+
+LARGE LANGUAGE MODELS
+
+A Large Language Model (LLM) is a neural network trained on massive text corpora to understand and generate human language. LLMs can answer questions, write code, translate languages, and summarise documents.
+
+Groq is a company providing fast LLM inference using custom LPU (Language Processing Unit) hardware. The Groq API supports models including LLaMA 3, Mixtral, and Gemma with sub-second response latency.
+
+LLaMA (Large Language Model Meta AI) is an open-weight model family from Meta. LLaMA 3 is available in 8B and 70B parameter variants and is one of the strongest open models available.
+
+Temperature is a parameter that controls the randomness of LLM outputs. A temperature of 0.0 produces deterministic, factual outputs. A temperature of 1.0 produces more creative and varied responses.
+
+---
+
+LANGCHAIN FRAMEWORK
+
+LangChain is a Python framework for building LLM-powered applications. It provides abstractions for document loaders, text splitters, embeddings, vector stores, retrievers, and chains.
+
+LangChain Expression Language (LCEL) allows developers to compose complex LLM pipelines using a simple pipe syntax. Chains can be built from retrievers, prompts, LLMs, and output parsers.
+
+A Retriever in LangChain is an interface that returns relevant documents given a query. Vector store retrievers perform semantic similarity search over stored embeddings.
+
+RecursiveCharacterTextSplitter splits text by attempting paragraph breaks first, then sentences, then words, and finally individual characters. This preserves semantic context better than fixed-size splitting.
+
+---
+
+EMBEDDINGS
+
+An embedding is a dense numerical vector that represents the meaning of a piece of text. Semantically similar texts produce similar embedding vectors, enabling semantic search.
+
+The sentence-transformers library provides pre-trained models for generating text embeddings. The model all-MiniLM-L6-v2 produces 384-dimensional embeddings and runs efficiently on CPU hardware.
+
+HuggingFace is a platform and library ecosystem for machine learning models. It hosts thousands of pre-trained models including embedding models, LLMs, and vision models.
+
+---
+
+STREAMLIT
+
+Streamlit is a Python library for building interactive web applications with minimal code. It is widely used to create data science dashboards, ML demos, and chatbot interfaces.
+
+Streamlit supports chat_message components for building conversational interfaces. Session state allows message history to be preserved across interactions within the same browser session.

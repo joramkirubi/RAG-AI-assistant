@@ -1,115 +1,160 @@
 """
 ingest.py
-Loads documents from data/, splits them into chunks,
-embeds them, and stores them in ChromaDB.
+Loads .txt and .json documents from data/, splits them into chunks,
+embeds them with HuggingFace, and stores them in ChromaDB.
 
-Run once before starting the chatbot:
+Run once before starting the chatbot, and re-run whenever you add new documents:
     python ingest.py
 """
 
 import os
 import json
-from langchain_community.document_loaders import TextLoader
+import shutil
+from pathlib import Path
+
+from langchain.schema import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import TextLoader, DirectoryLoader
 from langchain_community.vectorstores import Chroma
+
 from vectordb import get_embeddings, VECTORSTORE_DIR, COLLECTION_NAME
 
+DATA_DIR      = "data"
+CHUNK_SIZE    = 600
+CHUNK_OVERLAP = 80
 
-DATA_DIR = "data"
-CHUNK_SIZE = 500
-CHUNK_OVERLAP = 50
+
+# ── Loaders ───────────────────────────────────────────────────────────────────
+
+def load_txt_files(data_dir: str) -> list[Document]:
+    """Load all .txt files, tagging each chunk with its source filename."""
+    docs = []
+    txt_files = list(Path(data_dir).glob("**/*.txt"))
+    for path in txt_files:
+        try:
+            loader = TextLoader(str(path), encoding="utf-8")
+            loaded = loader.load()
+            for doc in loaded:
+                doc.metadata["source"] = path.name
+                doc.metadata["file_type"] = "txt"
+            docs.extend(loaded)
+            print(f"  [TXT] Loaded: {path.name}")
+        except Exception as e:
+            print(f"  [WARN] Could not load {path.name}: {e}")
+    return docs
 
 
-def load_documents(data_dir: str):
-    print(f"[INFO] Loading documents from '{data_dir}/'...")
-
-    documents = []
-
-    for file in os.listdir(data_dir):
-        file_path = os.path.join(data_dir, file)
-
-        if file.endswith(".txt"):
-            loader = TextLoader(file_path, encoding="utf-8")
-            documents.extend(loader.load())
-
-        elif file.endswith(".json"):
-            with open(file_path, "r", encoding="utf-8") as f:
+def load_json_files(data_dir: str) -> list[Document]:
+    """
+    Load all .json files.
+    Handles both a single object and a list of objects.
+    Each item is converted to a readable text block and tagged with its source.
+    """
+    docs = []
+    json_files = list(Path(data_dir).glob("**/*.json"))
+    for path in json_files:
+        try:
+            with open(path, "r", encoding="utf-8") as f:
                 data = json.load(f)
 
-            # extract useful text
-            if isinstance(data, dict):
-                text = data.get("content") or data.get("text") or str(data)
+            # Normalise to a list of items
+            items = data if isinstance(data, list) else [data]
 
-                documents.append(
-                    type("Doc", (), {"page_content": text, "metadata": {"source": file}})()
-                )
-
-            elif isinstance(data, list):
-                for item in data:
-                    text = item.get("content") or item.get("text") or str(item)
-
-                    documents.append(
-                        type("Doc", (), {"page_content": text, "metadata": {"source": file}})()
+            for i, item in enumerate(items):
+                # Convert each JSON item to a readable key: value text block
+                if isinstance(item, dict):
+                    text = "\n".join(
+                        f"{k}: {v}" for k, v in item.items()
+                        if v is not None and str(v).strip() != ""
                     )
+                else:
+                    text = str(item)
 
-    print(f"[INFO] Loaded {len(documents)} document(s).")
-    return documents
+                if text.strip():
+                    doc = Document(
+                        page_content=text,
+                        metadata={
+                            "source": path.name,
+                            "file_type": "json",
+                            "item_index": i,
+                        },
+                    )
+                    docs.append(doc)
+
+            print(f"  [JSON] Loaded: {path.name}  ({len(items)} item(s))")
+        except Exception as e:
+            print(f"  [WARN] Could not load {path.name}: {e}")
+    return docs
 
 
-def split_documents(documents):
-    """Split documents into smaller overlapping chunks."""
+def load_all_documents(data_dir: str) -> list[Document]:
+    """Load all supported file types from data/."""
+    print(f"\n[INFO] Scanning '{data_dir}/' for documents...")
+    txt_docs  = load_txt_files(data_dir)
+    json_docs = load_json_files(data_dir)
+    all_docs  = txt_docs + json_docs
+    print(f"[INFO] Total documents loaded: {len(all_docs)}")
+    return all_docs
+
+
+# ── Chunking ──────────────────────────────────────────────────────────────────
+
+def split_documents(documents: list[Document]) -> list[Document]:
+    """Split documents into overlapping chunks, preserving source metadata."""
     print(f"[INFO] Splitting into chunks (size={CHUNK_SIZE}, overlap={CHUNK_OVERLAP})...")
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=CHUNK_SIZE,
         chunk_overlap=CHUNK_OVERLAP,
-        separators=["\n\n", "\n", ".", " ", ""],
+        separators=["\n\n", "\n", ". ", " ", ""],
     )
     chunks = splitter.split_documents(documents)
-    print(f"[INFO] Created {len(chunks)} chunks.")
+    print(f"[INFO] Total chunks created: {len(chunks)}")
     return chunks
 
 
-def build_vectorstore(chunks, embeddings):
-    """Embed chunks and persist them into ChromaDB."""
-    print(f"[INFO] Embedding chunks and saving to '{VECTORSTORE_DIR}/'...")
+# ── Embedding & Storage ───────────────────────────────────────────────────────
 
-    # Remove old store if it exists so we start fresh
+def build_vectorstore(chunks: list[Document], embeddings) -> None:
+    """Embed all chunks and persist them to ChromaDB."""
+    print(f"[INFO] Embedding and saving to '{VECTORSTORE_DIR}/'...")
+
     if os.path.exists(VECTORSTORE_DIR):
-        import shutil
         shutil.rmtree(VECTORSTORE_DIR)
         print(f"[INFO] Cleared existing vector store.")
 
-    vectorstore = Chroma.from_documents(
+    Chroma.from_documents(
         documents=chunks,
         embedding=embeddings,
         collection_name=COLLECTION_NAME,
         persist_directory=VECTORSTORE_DIR,
     )
-    print(f"[INFO] Vector store saved to '{VECTORSTORE_DIR}/'.")
-    return vectorstore
+    print(f"[INFO] Vector store saved successfully.")
 
+
+# ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
-    print("=" * 50)
+    print("=" * 55)
     print("   RAG Ingestion Pipeline")
-    print("=" * 50)
+    print("=" * 55)
 
-    # Step 1: Load
-    documents = load_documents(DATA_DIR)
-    if not documents:
-        print("[ERROR] No documents found in data/. Add .txt or .json files and retry.")
+    if not os.path.exists(DATA_DIR):
+        print(f"[ERROR] '{DATA_DIR}/' directory not found. Create it and add documents.")
         return
 
-    # Step 2: Split
-    chunks = split_documents(documents)
+    documents = load_all_documents(DATA_DIR)
 
-    # Step 3: Embed and store
+    if not documents:
+        print(f"[ERROR] No .txt or .json files found in '{DATA_DIR}/'. Add documents and retry.")
+        return
+
+    chunks    = split_documents(documents)
     embeddings = get_embeddings()
     build_vectorstore(chunks, embeddings)
 
-    print("\n[SUCCESS] Ingestion complete! You can now run the chatbot.")
-    print("   Streamlit : streamlit run app.py")
-    print("=" * 50)
+    print("\n[SUCCESS] Ingestion complete!")
+    print("   Run the chatbot with:  streamlit run app.py")
+    print("=" * 55)
 
 
 if __name__ == "__main__":
