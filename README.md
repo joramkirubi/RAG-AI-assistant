@@ -12,6 +12,7 @@ Built with ChromaDB, HuggingFace embeddings, Groq LLM, LangChain, and Streamlit.
 
 This assistant is scoped to **healthcare and medical topics** including:
 
+- WHO World Health Statistics 2025 (global health indicators, disease burden, mortality data)
 - Common conditions and symptoms (hypertension, diabetes, asthma, cardiovascular disease)
 - Medications and drug classes (antibiotics, analgesics, antihypertensives)
 - Preventive care and screening guidelines
@@ -199,6 +200,7 @@ The LLM internally follows: **Thought → Observe → Reason → Act** before wr
 |---|---|
 | `.txt` | Read directly with TextLoader, UTF-8 encoding |
 | `.json` | Parsed as array or object; each item becomes a document chunk |
+| `.pdf` | Loaded page by page using PyPDFLoader, preserves page metadata |
 
 ---
 

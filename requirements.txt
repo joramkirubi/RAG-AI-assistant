@@ -6,3 +6,4 @@ chromadb==0.5.5
 sentence-transformers==3.0.1
 streamlit==1.37.1
 python-dotenv==1.0.1
+pypdf==4.3.1

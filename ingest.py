@@ -14,7 +14,7 @@ from pathlib import Path
 
 from langchain.schema import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.document_loaders import TextLoader, DirectoryLoader
+from langchain_community.document_loaders import TextLoader, DirectoryLoader, PyPDFLoader
 from langchain_community.vectorstores import Chroma
 
 from vectordb import get_embeddings, VECTORSTORE_DIR, COLLECTION_NAME
@@ -86,13 +86,30 @@ def load_json_files(data_dir: str) -> list[Document]:
             print(f"  [WARN] Could not load {path.name}: {e}")
     return docs
 
+def load_pdf_files(data_dir: str) -> list[Document]:
+    """Load all .pdf files, preserving page metadata."""
+    docs = []
+    pdf_files = list(Path(data_dir).glob("**/*.pdf"))
+    for path in pdf_files:
+        try:
+            loader = PyPDFLoader(str(path))
+            loaded = loader.load()
+            for doc in loaded:
+                doc.metadata["source"] = path.name
+                doc.metadata["file_type"] = "pdf"
+            docs.extend(loaded)
+            print(f"  [PDF] Loaded: {path.name}  ({len(loaded)} page(s))")
+        except Exception as e:
+            print(f"  [WARN] Could not load {path.name}: {e}")
+    return docs
 
 def load_all_documents(data_dir: str) -> list[Document]:
     """Load all supported file types from data/."""
     print(f"\n[INFO] Scanning '{data_dir}/' for documents...")
     txt_docs  = load_txt_files(data_dir)
     json_docs = load_json_files(data_dir)
-    all_docs  = txt_docs + json_docs
+    pdf_docs = load_pdf_files(data_dir)
+    all_docs  = txt_docs + json_docs + pdf_docs
     print(f"[INFO] Total documents loaded: {len(all_docs)}")
     return all_docs
 
