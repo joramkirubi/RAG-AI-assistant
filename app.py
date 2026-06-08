@@ -1,12 +1,17 @@
 """
 app.py
-Streamlit chatbot interface for the RAG Assistant.
+Medical AI Assistant — Streamlit Interface
 
-Key improvement: embedding model and vector store are pre-loaded and cached
-using @st.cache_resource when the app starts. This means the first question
-is answered at the same speed as all subsequent ones — no cold-start delay.
+Features:
+- Conversation history passed to the LLM for follow-up question support
+- Retrieval evaluation metrics displayed in the sidebar
+- Source attribution on every answer
+- Embedding model cached on startup to eliminate cold-start delay
 
 Run with:
+    python -m streamlit run app.py
+
+If the above fails due to path conflicts:
     python -m streamlit run app.py
 """
 
@@ -20,8 +25,8 @@ load_dotenv()
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="RAG AI Assistant",
-    page_icon="🤖",
+    page_title="MedAssist — Medical AI Assistant",
+    page_icon="🏥",
     layout="centered",
 )
 
@@ -30,7 +35,7 @@ st.markdown("""
 <style>
 .stApp { background-color: #0f1117; }
 .source-box {
-    background-color: #111820;
+    background-color: #0c1e2e;
     border: 1px solid #1e3a5f;
     border-left: 3px solid #185FA5;
     border-radius: 6px;
@@ -47,20 +52,39 @@ st.markdown("""
     letter-spacing: 0.05em;
     margin-bottom: 4px;
 }
+.disclaimer {
+    background-color: #1a1200;
+    border: 1px solid #4a3800;
+    border-left: 3px solid #c8960a;
+    border-radius: 6px;
+    padding: 8px 14px;
+    margin-top: 6px;
+    font-size: 0.78rem;
+    color: #c8960a;
+}
 </style>
 """, unsafe_allow_html=True)
 
 # ── Header ────────────────────────────────────────────────────────────────────
-st.markdown("## 🤖 RAG AI Assistant")
+st.markdown("## 🏥 MedAssist — Medical AI Assistant")
 st.markdown(
     "<span style='color:#4a7a9b; font-size:0.9rem;'>"
-    "ChromaDB &nbsp;·&nbsp; HuggingFace Embeddings &nbsp;·&nbsp; Groq LLM &nbsp;·&nbsp; ReAct Reasoning"
+    "Healthcare Knowledge Base &nbsp;·&nbsp; ChromaDB &nbsp;·&nbsp; "
+    "Groq LLM &nbsp;·&nbsp; ReAct Reasoning"
     "</span>",
+    unsafe_allow_html=True,
+)
+st.markdown(
+    "<div class='disclaimer'>"
+    "⚕️ <b>Medical Disclaimer:</b> This assistant provides general health information only. "
+    "It is not a substitute for professional medical advice, diagnosis, or treatment. "
+    "Always consult a qualified healthcare provider for personal medical decisions."
+    "</div>",
     unsafe_allow_html=True,
 )
 st.divider()
 
-# ── Check setup before anything else ─────────────────────────────────────────
+# ── Setup checks ──────────────────────────────────────────────────────────────
 api_key   = os.environ.get("GROQ_API_KEY", "")
 vs_exists = os.path.exists("vectorstore")
 
@@ -72,22 +96,21 @@ if not vs_exists:
     st.error("⚠️ **Vector store not found.** Run `python ingest.py` first.")
     st.stop()
 
-# ── Pre-load and cache embedding model + vector store ─────────────────────────
-# @st.cache_resource runs this function ONCE when the app starts and keeps
-# the result in memory. Every query after the first uses the cached objects —
-# no model re-loading, no cold-start delay.
-@st.cache_resource(show_spinner="Loading knowledge base... (first time only)")
+# ── Cache embedding model + vector store on startup ───────────────────────────
+@st.cache_resource(show_spinner="Loading medical knowledge base... (first time only)")
 def load_rag_components():
     embeddings  = get_embeddings()
     vectorstore = get_vectorstore(embeddings)
     return embeddings, vectorstore
 
-# Trigger the cache on startup so it's ready before the first question
 load_rag_components()
 
 # ── Session state ─────────────────────────────────────────────────────────────
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    st.session_state.messages = []      # full chat history {role, content, sources}
+
+if "last_metrics" not in st.session_state:
+    st.session_state.last_metrics = None
 
 # ── Render chat history ───────────────────────────────────────────────────────
 for msg in st.session_state.messages:
@@ -107,24 +130,34 @@ for msg in st.session_state.messages:
             )
 
 # ── Input ─────────────────────────────────────────────────────────────────────
-if prompt := st.chat_input("Ask a question about your documents..."):
+if prompt := st.chat_input("Ask a medical or health question..."):
 
+    # Add user message
     st.session_state.messages.append({"role": "user", "content": prompt, "sources": []})
     with st.chat_message("user"):
         st.markdown(prompt)
 
+    # Build history list for the LLM (exclude sources metadata)
+    history = [
+        {"role": m["role"], "content": m["content"]}
+        for m in st.session_state.messages[:-1]  # exclude current message
+    ]
+
+    # Generate answer
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             try:
-                result  = ask(prompt)
+                result  = ask(prompt, history=history)
                 answer  = result["answer"]
                 sources = result["sources"]
+                metrics = result["metrics"]
+                st.session_state.last_metrics = metrics
             except FileNotFoundError as e:
-                answer, sources = f"❌ {e}", []
+                answer, sources, metrics = f"❌ {e}", [], None
             except EnvironmentError as e:
-                answer, sources = f"❌ {e}", []
+                answer, sources, metrics = f"❌ {e}", [], None
             except Exception as e:
-                answer, sources = f"❌ Unexpected error: {e}", []
+                answer, sources, metrics = f"❌ Unexpected error: {e}", [], None
 
         st.markdown(answer)
 
@@ -149,7 +182,7 @@ if prompt := st.chat_input("Ask a question about your documents..."):
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.header("⚙️ Settings")
+    st.header("⚙️ System Status")
 
     if api_key:
         st.success("✅ GROQ_API_KEY loaded")
@@ -157,6 +190,8 @@ with st.sidebar:
         st.error("❌ GROQ_API_KEY missing")
 
     st.divider()
+
+    # Knowledge base files
     st.subheader("📂 Knowledge Base")
     data_dir = "data"
     if os.path.exists(data_dir):
@@ -169,11 +204,13 @@ with st.sidebar:
                 icon = "📄" if f.endswith(".txt") else "📋"
                 st.markdown(f"{icon} `{f}`")
         else:
-            st.warning("No .txt or .json files found in data/")
+            st.warning("No documents found in data/")
     else:
         st.warning("data/ directory not found.")
 
     st.divider()
+
+    # Vector store status
     st.subheader("🗄️ Vector Store")
     if vs_exists:
         st.success("✅ Ready")
@@ -181,13 +218,32 @@ with st.sidebar:
         st.error("❌ Run python ingest.py")
 
     st.divider()
+
+    # Reasoning strategy
     st.subheader("🧠 Reasoning")
     st.info("Strategy: **ReAct**\nReason → Retrieve → Answer")
 
     st.divider()
+
+    # Retrieval metrics for last query
+    st.subheader("📊 Last Query Metrics")
+    m = st.session_state.last_metrics
+    if m:
+        col1, col2 = st.columns(2)
+        col1.metric("Chunks", m["chunks_retrieved"])
+        col2.metric("Sources", m["source_diversity"])
+        col1.metric("Avg Length", f"{m['avg_chunk_length']}c")
+        col2.metric("Coverage", m["coverage_score"])
+    else:
+        st.caption("Metrics appear after your first question.")
+
+    st.divider()
+
+    # Clear chat
     if st.button("🗑️ Clear Chat"):
-        st.session_state.messages = []
+        st.session_state.messages      = []
+        st.session_state.last_metrics  = None
         st.rerun()
 
     st.divider()
-    st.caption("RAG AI Assistant · Joram Kirubi")
+    st.caption("MedAssist · RAG AI Assistant · Joram Kirubi")

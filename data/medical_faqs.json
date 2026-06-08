@@ -1,0 +1,62 @@
+[
+  {
+    "question": "What is a normal resting heart rate?",
+    "answer": "A normal resting heart rate for adults is between 60 and 100 beats per minute (bpm). Athletes may have lower resting heart rates, sometimes below 60 bpm, which is normal. A consistently high resting heart rate above 100 bpm (tachycardia) or below 60 bpm (bradycardia) in non-athletes should be evaluated by a doctor.",
+    "category": "Cardiovascular Health",
+    "source": "medical_faqs"
+  },
+  {
+    "question": "What are the early warning signs of diabetes?",
+    "answer": "Early warning signs of diabetes include increased thirst and frequent urination, unexplained weight loss, extreme fatigue, blurred vision, slow-healing cuts or bruises, frequent infections, tingling or numbness in hands or feet, and darkened skin in body creases (acanthosis nigricans). Type 2 diabetes can develop slowly and silently, which is why regular blood glucose screening is important.",
+    "category": "Diabetes",
+    "source": "medical_faqs"
+  },
+  {
+    "question": "How do I know if I am having an allergic reaction?",
+    "answer": "Symptoms of an allergic reaction range from mild to severe. Mild reactions include hives, itching, nasal congestion, and watery eyes. Moderate reactions include swelling, stomach cramps, and vomiting. A severe allergic reaction (anaphylaxis) is life-threatening and includes throat swelling, difficulty breathing, rapid pulse, dizziness, and loss of consciousness. Anaphylaxis requires immediate emergency treatment with epinephrine (EpiPen) and emergency services.",
+    "category": "Allergies",
+    "source": "medical_faqs"
+  },
+  {
+    "question": "What is the difference between a cold and the flu?",
+    "answer": "Both colds and flu are respiratory illnesses caused by viruses but by different ones. Colds develop gradually with mild symptoms such as runny nose, sore throat, and mild cough. Flu symptoms come on suddenly and are more severe, including high fever (38-40°C), muscle aches, severe fatigue, and headache. Flu can lead to serious complications such as pneumonia, especially in the elderly, young children, and immunocompromised individuals. Flu can be prevented by annual vaccination; antibiotics do not treat either illness as both are viral.",
+    "category": "Infectious Disease",
+    "source": "medical_faqs"
+  },
+  {
+    "question": "What are the recommended cancer screening tests?",
+    "answer": "Key cancer screening tests include: Colorectal cancer — colonoscopy every 10 years starting at age 45, or stool tests annually. Breast cancer — mammogram every 1-2 years for women aged 40-74. Cervical cancer — Pap smear every 3 years for women aged 21-65, or combined Pap/HPV test every 5 years. Lung cancer — annual low-dose CT scan for adults aged 50-80 with a significant smoking history. Prostate cancer — PSA blood test; discuss with your doctor at age 55-69. Skin cancer — regular skin self-examination and dermatology check for high-risk individuals.",
+    "category": "Preventive Care",
+    "source": "medical_faqs"
+  },
+  {
+    "question": "What should I do if I miss a dose of my medication?",
+    "answer": "If you miss a dose, take it as soon as you remember — unless it is almost time for your next scheduled dose. In that case, skip the missed dose and continue with your regular schedule. Never double up doses to make up for a missed one. For certain medications such as blood thinners, antiepileptics, and HIV medications, missed doses can have serious consequences. Always consult your pharmacist or prescribing doctor for specific guidance on your medication.",
+    "category": "Medication Management",
+    "source": "medical_faqs"
+  },
+  {
+    "question": "What are normal cholesterol levels?",
+    "answer": "Desirable cholesterol levels for adults: Total cholesterol below 200 mg/dL is desirable; 200-239 mg/dL is borderline high; 240 mg/dL and above is high. LDL (bad cholesterol) below 100 mg/dL is optimal; below 130 mg/dL is near optimal. HDL (good cholesterol) above 60 mg/dL is protective; below 40 mg/dL in men and below 50 mg/dL in women increases heart disease risk. Triglycerides below 150 mg/dL is normal. High cholesterol has no symptoms and is diagnosed through a blood test (lipid panel).",
+    "category": "Cardiovascular Health",
+    "source": "medical_faqs"
+  },
+  {
+    "question": "How can I improve my mental health?",
+    "answer": "Evidence-based strategies for improving mental health include: regular physical exercise (shown to reduce depression and anxiety symptoms), maintaining social connections with friends and family, practising mindfulness or meditation, getting 7-9 hours of quality sleep, limiting alcohol and avoiding recreational drugs, setting realistic goals and breaking tasks into manageable steps, seeking professional help from a therapist or counsellor when needed, and taking breaks from social media and news. If symptoms of depression or anxiety persist for more than two weeks or interfere with daily functioning, consult a healthcare provider.",
+    "category": "Mental Health",
+    "source": "medical_faqs"
+  },
+  {
+    "question": "What are the symptoms of dehydration?",
+    "answer": "Mild to moderate dehydration symptoms include increased thirst, dry mouth, reduced urination, dark yellow urine, fatigue, dizziness, and headache. Severe dehydration is a medical emergency with symptoms including extreme thirst, very dark urine or no urination, rapid heartbeat, rapid breathing, sunken eyes, confusion, and fainting. Treatment for mild dehydration is increased fluid intake. Severe dehydration may require intravenous fluids. Adults should aim to drink approximately 2 litres of water per day, more during exercise or hot weather.",
+    "category": "General Health",
+    "source": "medical_faqs"
+  },
+  {
+    "question": "What is BMI and what does it mean?",
+    "answer": "Body Mass Index (BMI) is a measure of body fat based on weight and height. It is calculated as weight (kg) divided by height squared (m²). BMI categories: below 18.5 is underweight; 18.5-24.9 is normal weight; 25.0-29.9 is overweight; 30.0 and above is obese. BMI is a screening tool, not a diagnostic measure. It does not account for muscle mass, bone density, or fat distribution. A high BMI increases risk of type 2 diabetes, heart disease, hypertension, and certain cancers. Waist circumference is often used alongside BMI — risk increases above 88cm (35 inches) for women and 102cm (40 inches) for men.",
+    "category": "General Health",
+    "source": "medical_faqs"
+  }
+]

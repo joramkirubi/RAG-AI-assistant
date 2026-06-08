@@ -1,0 +1,195 @@
+MEDICAL KNOWLEDGE BASE — HEALTHCARE RAG ASSISTANT
+
+This document provides foundational healthcare and medical knowledge
+for the RAG-based Medical AI Assistant.
+
+---
+
+COMMON CONDITIONS AND SYMPTOMS
+
+Hypertension (High Blood Pressure)
+Hypertension is a chronic condition where the force of blood against artery walls is consistently too high. Normal blood pressure is below 120/80 mmHg. Stage 1 hypertension is 130-139/80-89 mmHg. Stage 2 hypertension is 140/90 mmHg or higher.
+
+Symptoms of hypertension are often absent, which is why it is called the "silent killer." When symptoms do occur they may include headaches, shortness of breath, and nosebleeds. Long-term complications include heart disease, stroke, kidney damage, and vision loss.
+
+Treatment includes lifestyle changes such as reducing sodium intake, regular physical activity, maintaining a healthy weight, and limiting alcohol. Medications include ACE inhibitors, beta-blockers, calcium channel blockers, and diuretics.
+
+---
+
+Diabetes Mellitus
+Diabetes is a metabolic disease characterized by high blood sugar levels over a prolonged period. There are two main types:
+
+Type 1 Diabetes: An autoimmune condition where the pancreas produces little or no insulin. It typically develops in children and young adults. Treatment requires daily insulin injections or an insulin pump.
+
+Type 2 Diabetes: The most common form. The body does not use insulin properly (insulin resistance). Risk factors include obesity, physical inactivity, family history, and age over 45. Treatment includes lifestyle changes, oral medications such as metformin, and sometimes insulin.
+
+Symptoms of diabetes include increased thirst, frequent urination, extreme fatigue, blurred vision, slow-healing sores, and frequent infections. Fasting blood glucose above 126 mg/dL on two separate tests indicates diabetes.
+
+Complications of uncontrolled diabetes include neuropathy, retinopathy, nephropathy, cardiovascular disease, and increased risk of infection.
+
+---
+
+Asthma
+Asthma is a chronic respiratory condition that causes inflammation and narrowing of the airways. It affects people of all ages and is triggered by allergens, exercise, cold air, smoke, and respiratory infections.
+
+Symptoms include wheezing, shortness of breath, chest tightness, and coughing — especially at night or early morning. Asthma is classified as intermittent, mild persistent, moderate persistent, or severe persistent based on symptom frequency.
+
+Treatment includes quick-relief inhalers (bronchodilators such as albuterol) for immediate symptom relief, and long-term control medications such as inhaled corticosteroids (budesonide, fluticasone) to reduce inflammation.
+
+Asthma action plans help patients identify triggers, monitor symptoms, and know when to seek emergency care. Anaphylaxis and severe asthma attacks require immediate emergency treatment with epinephrine.
+
+---
+
+Cardiovascular Disease
+Cardiovascular disease (CVD) refers to conditions affecting the heart and blood vessels. It is the leading cause of death globally. Major types include:
+
+Coronary Artery Disease (CAD): Caused by plaque buildup in the coronary arteries reducing blood flow to the heart. Symptoms include chest pain (angina), shortness of breath, and heart attack.
+
+Heart Failure: The heart cannot pump enough blood to meet the body's needs. Symptoms include fatigue, swollen legs, and difficulty breathing. Treatment includes ACE inhibitors, beta-blockers, and diuretics.
+
+Atrial Fibrillation (AFib): An irregular heart rhythm that increases stroke risk. Treatment includes blood thinners (anticoagulants), rate control medications, and procedures such as cardioversion.
+
+Risk factors for CVD include hypertension, high cholesterol, smoking, diabetes, obesity, physical inactivity, and family history.
+
+---
+
+MEDICATIONS AND DRUG CLASSES
+
+Antibiotics
+Antibiotics are medicines that fight bacterial infections. They do not work against viral infections such as the common cold or flu.
+
+Common classes:
+- Penicillins (amoxicillin): Used for ear infections, pneumonia, and strep throat.
+- Cephalosporins (cefalexin): Used for skin infections and urinary tract infections.
+- Macrolides (azithromycin): Used for respiratory infections and STIs.
+- Fluoroquinolones (ciprofloxacin): Used for UTIs, respiratory infections, and gastrointestinal infections.
+- Tetracyclines (doxycycline): Used for acne, Lyme disease, and respiratory infections.
+
+Antibiotic resistance occurs when bacteria evolve to resist the effects of an antibiotic. It is a growing global health threat. Patients should always complete a full course of antibiotics even if they feel better early.
+
+---
+
+Analgesics (Pain Relievers)
+Analgesics relieve pain without causing loss of consciousness. Main types:
+
+Non-opioid analgesics:
+- Paracetamol (acetaminophen): Effective for mild to moderate pain and fever. Safe when used as directed; overdose can cause severe liver damage.
+- NSAIDs (ibuprofen, naproxen, aspirin): Reduce inflammation, pain, and fever. Side effects include gastrointestinal irritation and increased bleeding risk.
+
+Opioid analgesics:
+- Morphine, oxycodone, codeine: Used for severe pain. Risk of dependence, respiratory depression, and overdose. Should be prescribed with caution.
+
+---
+
+Antihypertensives
+Antihypertensive drugs lower blood pressure. Main classes:
+
+- ACE inhibitors (lisinopril, enalapril): Block the enzyme that narrows blood vessels. Side effect: dry cough.
+- ARBs (losartan, valsartan): Similar to ACE inhibitors without the cough side effect.
+- Beta-blockers (metoprolol, atenolol): Reduce heart rate and workload. Used in heart failure and AFib.
+- Calcium channel blockers (amlodipine, diltiazem): Relax blood vessel walls.
+- Diuretics (furosemide, hydrochlorothiazide): Increase urine output to reduce fluid volume.
+
+---
+
+PREVENTIVE HEALTHCARE
+
+Vaccinations
+Vaccines stimulate the immune system to produce immunity to a specific disease. Core adult vaccines include:
+
+- Influenza (flu): Recommended annually for all adults.
+- COVID-19: Primary series plus boosters as recommended.
+- Tetanus, Diphtheria, Pertussis (Tdap): Booster every 10 years.
+- Pneumococcal vaccine: Recommended for adults 65+ and high-risk individuals.
+- Hepatitis B: Three-dose series for unvaccinated adults.
+- HPV vaccine: Recommended through age 26 for all genders.
+
+Herd immunity occurs when a sufficiently large proportion of a population is immune to a disease, reducing its spread to vulnerable individuals.
+
+---
+
+Screening Guidelines
+Preventive screenings detect disease early when treatment is most effective:
+
+- Blood pressure: Checked at every clinical visit; annually for adults 18+.
+- Cholesterol (lipid panel): Every 4-6 years for adults 20+; more frequently for high-risk individuals.
+- Blood glucose (diabetes screening): Every 3 years for adults 35-70 who are overweight.
+- Colorectal cancer: Colonoscopy every 10 years starting at age 45.
+- Breast cancer (mammogram): Every 1-2 years for women 40-74.
+- Cervical cancer (Pap smear): Every 3 years for women 21-65.
+- Prostate cancer (PSA): Discuss with doctor; recommended for men 55-69.
+
+---
+
+MENTAL HEALTH
+
+Depression
+Major Depressive Disorder (MDD) is a mood disorder characterized by persistent feelings of sadness, hopelessness, and loss of interest in activities. It affects approximately 280 million people worldwide.
+
+Diagnostic criteria (DSM-5) require five or more symptoms present for at least two weeks, including depressed mood or loss of interest. Other symptoms include sleep disturbances, fatigue, difficulty concentrating, changes in appetite, feelings of worthlessness, and suicidal ideation.
+
+Treatment includes psychotherapy (cognitive behavioral therapy — CBT), antidepressant medications (SSRIs such as fluoxetine and sertraline are first-line), and in severe cases, electroconvulsive therapy (ECT).
+
+---
+
+Anxiety Disorders
+Anxiety disorders are the most common mental health conditions globally. Types include:
+
+- Generalized Anxiety Disorder (GAD): Excessive worry about everyday matters for at least 6 months.
+- Panic Disorder: Recurrent unexpected panic attacks with fear of future attacks.
+- Social Anxiety Disorder: Intense fear of social situations.
+- PTSD: Trauma-related condition with flashbacks, nightmares, and hyperarousal.
+
+Treatment includes CBT, exposure therapy, and medications such as SSRIs, SNRIs, and benzodiazepines (short-term only due to dependence risk).
+
+---
+
+FIRST AID AND EMERGENCY CARE
+
+Signs of a Heart Attack
+A heart attack (myocardial infarction) occurs when blood flow to the heart is blocked. Symptoms include:
+- Chest pain or pressure lasting more than a few minutes
+- Pain radiating to the arm, jaw, neck, or back
+- Shortness of breath
+- Cold sweat, nausea, or lightheadedness
+
+Action: Call emergency services (911) immediately. Chew one regular aspirin (325mg) if not allergic. Do not drive yourself to the hospital.
+
+Signs of a Stroke (FAST)
+- Face drooping
+- Arm weakness
+- Speech difficulty
+- Time to call emergency services immediately
+
+Stroke treatment is time-critical. Clot-busting medication (tPA) must be administered within 3-4.5 hours of symptom onset.
+
+CPR (Cardiopulmonary Resuscitation)
+CPR is an emergency procedure for cardiac arrest. Steps:
+1. Check for responsiveness and breathing.
+2. Call emergency services.
+3. Begin chest compressions — push hard and fast in the center of the chest at 100-120 compressions per minute.
+4. Give rescue breaths if trained (30 compressions to 2 breaths).
+5. Continue until emergency services arrive or an AED is available.
+
+---
+
+NUTRITION AND LIFESTYLE
+
+Balanced Diet Guidelines
+A healthy diet reduces risk of chronic diseases including diabetes, heart disease, and cancer:
+
+- Fruits and vegetables: At least 5 portions per day (400g minimum).
+- Whole grains: Brown rice, oats, whole wheat bread over refined grains.
+- Protein: Lean meats, fish, legumes, nuts, and seeds.
+- Dairy or alternatives: For calcium and vitamin D.
+- Fats: Unsaturated fats (olive oil, avocado) over saturated and trans fats.
+- Sugar: Limit added sugar to less than 10% of total calorie intake.
+- Salt: Less than 5g per day to reduce hypertension risk.
+
+Physical Activity Recommendations (WHO)
+- Adults 18-64: At least 150-300 minutes of moderate-intensity aerobic activity per week, or 75-150 minutes of vigorous-intensity activity.
+- Muscle-strengthening activities on 2 or more days per week.
+- Reduce sedentary time.
+
+Sleep
+Adults need 7-9 hours of sleep per night. Chronic sleep deprivation increases risk of obesity, diabetes, cardiovascular disease, and mental health disorders. Good sleep hygiene includes consistent sleep and wake times, limiting screen time before bed, and keeping the bedroom dark and cool.
